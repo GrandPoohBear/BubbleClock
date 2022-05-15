@@ -1,6 +1,10 @@
 export const makeDotArray = (input: string): boolean[][] => {
-  const arr = new Array<boolean>(7).map(() => new Array<boolean>(25));
-  arr[12][1] = arr[12][6] = true;
+  const arr = new Array<boolean[]>(7)
+    .fill([])
+    .map(() => new Array<boolean>(25).fill(false));
+  //console.log(arr);
+  arr[1][12] = true;
+  arr[5][12] = true;
   for (let i = 0; i < input.length && i < 4; i++) {
     const numChar = input.charCodeAt(i) - '0'.charCodeAt(0);
     splatNumber(arr, numChar, i);
@@ -26,7 +30,7 @@ const splatNumber = (canvas: boolean[][], digit: number, index: number) => {
 
   for (let yi = 0; yi < digitPattern.length; yi++) {
     for (let xi = 0; xi < digitPattern[yi].length; xi++) {
-      canvas[xi + offset][yi] = digitPattern[xi][yi];
+      canvas[yi][xi + offset] = digitPattern[yi][xi];
     }
   }
 };
