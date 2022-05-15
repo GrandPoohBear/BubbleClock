@@ -8,7 +8,7 @@ import Animated, {
   interpolateColor,
 } from 'react-native-reanimated';
 import {Dimensions, StyleSheet} from 'react-native';
-import {BUBBLE_WIDTH} from './BubbleView';
+import {BUBBLE_WIDTH} from './BubbleContainer';
 
 type BubbleProps = {
   x: number;
@@ -20,6 +20,14 @@ const BUBBLE_COLORS = {
   true: 'rgba(256, 0, 0, 1.0)',
   false: 'rgba(30,30,30,1.0)',
 };
+
+const LEFT_OFFSET = 20;
+const TOP_OFFSET = 50;
+
+const SLOW_DURATION_MS = 10000;
+const SLOW_VELOCITY = 0.1;
+const SLOW_MASS = 10;
+
 export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
   const position = useSharedValue({
     left: Math.random() * Dimensions.get('window').width,
@@ -31,12 +39,18 @@ export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
   }, [position, x, y]);
 
   const colorProgress = useDerivedValue(() => {
-    return withTiming(enabled ? 1 : 0);
+    return withTiming(enabled ? 1 : 0, {duration: SLOW_DURATION_MS});
   });
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      left: withSpring(position.value.left),
-      top: withSpring(position.value.top),
+      left: withSpring(LEFT_OFFSET + position.value.left, {
+        velocity: SLOW_VELOCITY,
+        mass: SLOW_MASS,
+      }),
+      top: withSpring(TOP_OFFSET + position.value.top, {
+        velocity: SLOW_VELOCITY,
+        mass: SLOW_MASS,
+      }),
       backgroundColor: interpolateColor(
         colorProgress.value,
         [0, 1],

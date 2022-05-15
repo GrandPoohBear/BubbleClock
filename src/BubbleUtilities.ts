@@ -1,10 +1,15 @@
+export const DISPLAY_DOTS_HEIGHT = 7;
+export const DISPLAY_DOTS_WIDTH = 25;
+
 export const makeDotArray = (input: string): boolean[][] => {
-  const arr = new Array<boolean[]>(7)
+  const arr = new Array<boolean[]>(DISPLAY_DOTS_HEIGHT)
     .fill([])
-    .map(() => new Array<boolean>(25).fill(false));
-  //console.log(arr);
+    .map(() => new Array<boolean>(DISPLAY_DOTS_WIDTH).fill(false));
+
+  // Draw the colon
   arr[1][12] = true;
   arr[5][12] = true;
+
   for (let i = 0; i < input.length && i < 4; i++) {
     const numChar = input.charCodeAt(i) - '0'.charCodeAt(0);
     splatNumber(arr, numChar, i);

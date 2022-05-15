@@ -3,7 +3,7 @@ import React from 'react';
 import {SafeAreaView, StatusBar, useColorScheme, View} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {BubbleView} from './src/BubbleView';
+import {BubbleContainer} from './src/BubbleContainer';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -20,7 +20,7 @@ const App = () => {
           width: '100%',
           height: '100%',
         }}>
-        <BubbleView />
+        <BubbleContainer />
       </View>
     </SafeAreaView>
   );
