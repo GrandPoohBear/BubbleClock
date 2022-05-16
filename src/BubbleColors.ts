@@ -1,4 +1,4 @@
-export const rainbowGradient = {
+export const redGradient = {
   inputRange: [0, 0.5, 1],
   outputRange: [
     'rgba(30,30,30,0.9)',

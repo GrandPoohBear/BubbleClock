@@ -9,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Dimensions, StyleSheet} from 'react-native';
 import {BUBBLE_WIDTH} from './BubbleContainer';
-import {rainbowGradient} from './BubbleColors';
+import {redGradient} from './BubbleColors';
 
 type BubbleProps = {
   x: number;
@@ -53,8 +53,8 @@ export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
       }),
       backgroundColor: interpolateColor(
         colorProgress.value,
-        rainbowGradient.inputRange,
-        rainbowGradient.outputRange,
+        redGradient.inputRange,
+        redGradient.outputRange,
       ),
     };
   });
