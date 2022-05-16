@@ -9,6 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Dimensions, StyleSheet} from 'react-native';
 import {BUBBLE_WIDTH} from './BubbleContainer';
+import {rainbowGradient} from './BubbleColors';
 
 type BubbleProps = {
   x: number;
@@ -16,17 +17,14 @@ type BubbleProps = {
   enabled: boolean;
 };
 
-const BUBBLE_COLORS = {
-  true: 'rgba(256, 0, 0, 1.0)',
-  false: 'rgba(30,30,30,1.0)',
-};
-
 const LEFT_OFFSET = 20;
 const TOP_OFFSET = 50;
 
 const SLOW_DURATION_MS = 10000;
-const SLOW_VELOCITY = 0.1;
+const SLOW_VELOCITY = 1;
 const SLOW_MASS = 10;
+const EASY_STIFFNESS = 20;
+const STIFFER_STIFFNESS = 40;
 
 export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
   const position = useSharedValue({
@@ -46,15 +44,17 @@ export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
       left: withSpring(LEFT_OFFSET + position.value.left, {
         velocity: SLOW_VELOCITY,
         mass: SLOW_MASS,
+        stiffness: EASY_STIFFNESS,
       }),
       top: withSpring(TOP_OFFSET + position.value.top, {
         velocity: SLOW_VELOCITY,
         mass: SLOW_MASS,
+        stiffness: STIFFER_STIFFNESS,
       }),
       backgroundColor: interpolateColor(
         colorProgress.value,
-        [0, 1],
-        [BUBBLE_COLORS.false, BUBBLE_COLORS.true],
+        rainbowGradient.inputRange,
+        rainbowGradient.outputRange,
       ),
     };
   });
