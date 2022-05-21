@@ -34,24 +34,37 @@ export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
   });
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      left: withSpring(bubbleModel.leftOffset + position.value.left, {
-        velocity: bubbleModel.springVelocity,
-        mass: bubbleModel.springMass,
-        stiffness: bubbleModel.springEasyStiffness,
-      }),
-      top: withSpring(bubbleModel.topOffset + position.value.top, {
-        velocity: bubbleModel.springVelocity,
-        mass: bubbleModel.springMass,
-        stiffness: bubbleModel.springStiffStiffness,
-      }),
+      transform: [
+        {
+          translateX: withSpring(bubbleModel.leftOffset + position.value.left, {
+            velocity: bubbleModel.springVelocity,
+            mass: bubbleModel.springMass,
+            stiffness: bubbleModel.springEasyStiffness,
+          }),
+        },
+        {
+          translateY: withSpring(bubbleModel.topOffset + position.value.top, {
+            velocity: bubbleModel.springVelocity,
+            mass: bubbleModel.springMass,
+            stiffness: bubbleModel.springStiffStiffness,
+          }),
+        },
+      ],
+
       backgroundColor: interpolateColor(
         colorProgress.value,
         redGradient.inputRange,
         redGradient.outputRange,
       ),
-      width: withTiming(bubbleModel.bubbleWidth),
-      height: withTiming(bubbleModel.bubbleWidth),
-      borderRadius: withTiming(bubbleModel.bubbleWidth),
+      width: withTiming(bubbleModel.bubbleWidth, {
+        duration: bubbleModel.colorChangeDurationMs,
+      }),
+      height: withTiming(bubbleModel.bubbleWidth, {
+        duration: bubbleModel.colorChangeDurationMs,
+      }),
+      borderRadius: withTiming(bubbleModel.bubbleWidth, {
+        duration: bubbleModel.colorChangeDurationMs,
+      }),
     };
   });
 

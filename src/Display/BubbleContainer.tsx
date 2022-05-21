@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {View, StyleSheet, Button} from 'react-native';
 import {
   makeDotArray,
@@ -10,6 +10,8 @@ import {Bubble} from './Bubble';
 import {makeShuffleTable} from '../utility/ShuffleTable';
 import {bubbleModel} from './BubbleModel';
 import {observer} from 'mobx-react-lite';
+import {reaction} from 'mobx';
+import {timerModel} from '../Timer/TimerModel';
 
 export const BubbleContainer = observer(() => {
   const [displayData, setDisplayData] = useState({
@@ -19,21 +21,19 @@ export const BubbleContainer = observer(() => {
   });
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const date = new Date();
-      const hours = ('' + date.getHours()).padStart(2, '0');
-      const minutes = ('' + date.getMinutes()).padStart(2, '0');
-      const newTimeString = `${hours}${minutes}`;
-      if (displayData.timeString !== newTimeString) {
+    const disposer = reaction(
+      () => timerModel.timeString,
+      () => {
         setDisplayData({
-          timeString: newTimeString,
+          timeString: timerModel.timeString,
           shuffleTable: shuffle(displayData.shuffleTable),
-          dotArray: makeDotArray(newTimeString),
+          dotArray: makeDotArray(timerModel.timeString),
         });
-      }
-    }, 300);
+      },
+    );
+
     return () => {
-      clearInterval(interval);
+      disposer();
     };
   });
 
@@ -43,6 +43,18 @@ export const BubbleContainer = observer(() => {
       shuffleTable: shuffle(displayData.shuffleTable),
     });
   }, [displayData]);
+
+  const start1MinuteTimer = useCallback(() => {
+    timerModel.startTimer(1 * 60);
+  }, []);
+
+  const start3MinuteTimer = useCallback(() => {
+    timerModel.startTimer(3 * 60);
+  }, []);
+
+  const start5MinuteTimer = useCallback(() => {
+    timerModel.startTimer(5 * 60);
+  }, []);
 
   const bubbleArray = displayData.dotArray.flatMap((row, rowIndex) => {
     return row.flatMap((cell, colIndex) => {
@@ -72,8 +84,20 @@ export const BubbleContainer = observer(() => {
 
   return (
     <View style={bubbleStyles.container}>
-      <View>{bubbleArray}</View>
+      <View
+        style={{
+          marginBottom:
+            (bubbleModel.bubbleWidth + bubbleModel.interBubbleSpace) *
+              DISPLAY_DOTS_HEIGHT +
+            bubbleModel.topOffset +
+            20,
+        }}>
+        {bubbleArray}
+      </View>
       <Button title="Reshuffle" onPress={shuffleCallback} />
+      <Button title="Start 1 Minute Timer" onPress={start1MinuteTimer} />
+      <Button title="Start 3 Minute Timer" onPress={start3MinuteTimer} />
+      <Button title="Start 5 Minute Timer" onPress={start5MinuteTimer} />
     </View>
   );
 });

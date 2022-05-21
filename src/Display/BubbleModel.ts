@@ -6,7 +6,7 @@ class BubbleModel {
   windowDimensions = Dimensions.get('window');
   leftOffset = 0;
   topOffset = 50;
-  refreshIntervalMs = 10000;
+  refreshIntervalSecs = 10;
 
   colorChangeDurationMs = 10000;
   springVelocity = 1;
