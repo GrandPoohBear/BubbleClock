@@ -4,15 +4,14 @@ import {
   makeDotArray,
   DISPLAY_DOTS_HEIGHT,
   DISPLAY_DOTS_WIDTH,
-} from './BubbleUtilities';
+} from './BubbleFont';
 import {shuffle} from 'lodash';
 import {Bubble} from './Bubble';
-import {makeShuffleTable} from './ShuffleTable';
+import {makeShuffleTable} from '../utility/ShuffleTable';
+import {bubbleModel} from './BubbleModel';
+import {observer} from 'mobx-react-lite';
 
-export const BUBBLE_WIDTH = 10;
-export const INTER_BUBBLE_SPACE = 3;
-
-export const BubbleContainer = () => {
+export const BubbleContainer = observer(() => {
   const [displayData, setDisplayData] = useState({
     timeString: '0000',
     shuffleTable: makeShuffleTable(DISPLAY_DOTS_HEIGHT * DISPLAY_DOTS_WIDTH),
@@ -57,8 +56,14 @@ export const BubbleContainer = () => {
       return (
         <Bubble
           key={`bubble_${myIndex}`}
-          x={shuffledColIndex * (BUBBLE_WIDTH + INTER_BUBBLE_SPACE)}
-          y={shuffledRowIndex * (BUBBLE_WIDTH + INTER_BUBBLE_SPACE)}
+          x={
+            shuffledColIndex *
+            (bubbleModel.bubbleWidth + bubbleModel.interBubbleSpace)
+          }
+          y={
+            shuffledRowIndex *
+            (bubbleModel.bubbleWidth + bubbleModel.interBubbleSpace)
+          }
           enabled={shuffledCell}
         />
       );
@@ -71,18 +76,12 @@ export const BubbleContainer = () => {
       <Button title="Reshuffle" onPress={shuffleCallback} />
     </View>
   );
-};
+});
 
 const bubbleStyles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
     backgroundColor: 'black',
-  },
-  bubble: {
-    position: 'absolute',
-    width: BUBBLE_WIDTH,
-    height: BUBBLE_WIDTH,
-    borderRadius: BUBBLE_WIDTH,
   },
 });

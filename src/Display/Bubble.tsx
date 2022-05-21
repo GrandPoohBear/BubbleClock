@@ -8,23 +8,14 @@ import Animated, {
   interpolateColor,
 } from 'react-native-reanimated';
 import {Dimensions, StyleSheet} from 'react-native';
-import {BUBBLE_WIDTH} from './BubbleContainer';
 import {redGradient} from './BubbleColors';
+import {bubbleModel} from './BubbleModel';
 
 type BubbleProps = {
   x: number;
   y: number;
   enabled: boolean;
 };
-
-const LEFT_OFFSET = 20;
-const TOP_OFFSET = 50;
-
-const SLOW_DURATION_MS = 10000;
-const SLOW_VELOCITY = 1;
-const SLOW_MASS = 10;
-const EASY_STIFFNESS = 20;
-const STIFFER_STIFFNESS = 40;
 
 export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
   const position = useSharedValue({
@@ -37,25 +28,30 @@ export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
   }, [position, x, y]);
 
   const colorProgress = useDerivedValue(() => {
-    return withTiming(enabled ? 1 : 0, {duration: SLOW_DURATION_MS});
+    return withTiming(enabled ? 1 : 0, {
+      duration: bubbleModel.colorChangeDurationMs,
+    });
   });
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      left: withSpring(LEFT_OFFSET + position.value.left, {
-        velocity: SLOW_VELOCITY,
-        mass: SLOW_MASS,
-        stiffness: EASY_STIFFNESS,
+      left: withSpring(bubbleModel.leftOffset + position.value.left, {
+        velocity: bubbleModel.springVelocity,
+        mass: bubbleModel.springMass,
+        stiffness: bubbleModel.springEasyStiffness,
       }),
-      top: withSpring(TOP_OFFSET + position.value.top, {
-        velocity: SLOW_VELOCITY,
-        mass: SLOW_MASS,
-        stiffness: STIFFER_STIFFNESS,
+      top: withSpring(bubbleModel.topOffset + position.value.top, {
+        velocity: bubbleModel.springVelocity,
+        mass: bubbleModel.springMass,
+        stiffness: bubbleModel.springStiffStiffness,
       }),
       backgroundColor: interpolateColor(
         colorProgress.value,
         redGradient.inputRange,
         redGradient.outputRange,
       ),
+      width: withTiming(bubbleModel.bubbleWidth),
+      height: withTiming(bubbleModel.bubbleWidth),
+      borderRadius: withTiming(bubbleModel.bubbleWidth),
     };
   });
 
@@ -65,8 +61,5 @@ export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
 const styles = StyleSheet.create({
   bubble: {
     position: 'absolute',
-    width: BUBBLE_WIDTH,
-    height: BUBBLE_WIDTH,
-    borderRadius: BUBBLE_WIDTH,
   },
 });
