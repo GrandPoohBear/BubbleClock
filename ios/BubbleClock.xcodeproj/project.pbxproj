@@ -43,6 +43,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = BubbleClock/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-BubbleClock-BubbleClockTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BubbleClock-BubbleClockTests.release.xcconfig"; path = "Target Support Files/Pods-BubbleClock-BubbleClockTests/Pods-BubbleClock-BubbleClockTests.release.xcconfig"; sourceTree = "<group>"; };
 		A14C9B402831832D004A37F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = BubbleClock/Assets.xcassets; sourceTree = "<group>"; };
+		A1BE59C4283A8207008F2886 /* BubbleClock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BubbleClock.entitlements; path = BubbleClock/BubbleClock.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -86,6 +87,7 @@
 		13B07FAE1A68108700A75B9A /* BubbleClock */ = {
 			isa = PBXGroup;
 			children = (
+				A1BE59C4283A8207008F2886 /* BubbleClock.entitlements */,
 				A14C9B402831832D004A37F3 /* Assets.xcassets */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -483,6 +485,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = BubbleClock/BubbleClock.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 7Y9T48JEJ6;
 				ENABLE_BITCODE = NO;
@@ -498,8 +502,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tutukain.BubbleClock;
 				PRODUCT_NAME = BubbleClock;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -510,6 +516,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = BubbleClock/BubbleClock.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 7Y9T48JEJ6;
 				INFOPLIST_FILE = BubbleClock/Info.plist;
@@ -524,7 +532,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tutukain.BubbleClock;
 				PRODUCT_NAME = BubbleClock;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

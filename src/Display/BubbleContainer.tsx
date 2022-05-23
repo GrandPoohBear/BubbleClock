@@ -12,6 +12,8 @@ import {bubbleModel} from './BubbleModel';
 import {observer} from 'mobx-react-lite';
 import {reaction} from 'mobx';
 import {timerModel} from '../Timer/TimerModel';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {BACKGROUND_BLACKISH} from '../colors';
 
 export const BubbleContainer = observer(() => {
   const [displayData, setDisplayData] = useState({
@@ -19,6 +21,11 @@ export const BubbleContainer = observer(() => {
     shuffleTable: makeShuffleTable(DISPLAY_DOTS_HEIGHT * DISPLAY_DOTS_WIDTH),
     dotArray: makeDotArray('0000'),
   });
+
+  const safeAreaInsets = useSafeAreaInsets();
+  useEffect(() => {
+    bubbleModel.setSafeAreaInsets(safeAreaInsets);
+  }, [safeAreaInsets]);
 
   useEffect(() => {
     const disposer = reaction(
@@ -36,13 +43,6 @@ export const BubbleContainer = observer(() => {
       disposer();
     };
   });
-
-  const shuffleCallback = useCallback(() => {
-    setDisplayData({
-      ...displayData,
-      shuffleTable: shuffle(displayData.shuffleTable),
-    });
-  }, [displayData]);
 
   const start1MinuteTimer = useCallback(() => {
     timerModel.startTimer(1 * 60);
@@ -94,7 +94,7 @@ export const BubbleContainer = observer(() => {
         }}>
         {bubbleArray}
       </View>
-      <Button title="Reshuffle" onPress={shuffleCallback} />
+
       <Button title="Start 1 Minute Timer" onPress={start1MinuteTimer} />
       <Button title="Start 3 Minute Timer" onPress={start3MinuteTimer} />
       <Button title="Start 5 Minute Timer" onPress={start5MinuteTimer} />
@@ -106,6 +106,6 @@ const bubbleStyles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
-    backgroundColor: 'black',
+    backgroundColor: BACKGROUND_BLACKISH,
   },
 });
