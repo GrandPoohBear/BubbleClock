@@ -487,7 +487,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BubbleClock/BubbleClock.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 7Y9T48JEJ6;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = BubbleClock/Info.plist;
@@ -518,7 +518,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BubbleClock/BubbleClock.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 7Y9T48JEJ6;
 				INFOPLIST_FILE = BubbleClock/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
