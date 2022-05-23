@@ -17,7 +17,7 @@ type BubbleProps = {
   enabled: boolean;
 };
 
-export const Bubble: React.FC<BubbleProps> = ({x, y, color}) => {
+export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
   // Set the initial position to something random
   const position = useSharedValue({
     left: Math.random() * Dimensions.get('window').width,

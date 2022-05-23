@@ -9,9 +9,9 @@ class BubbleModel {
   topOffset = 50;
   refreshIntervalSecs = 10;
 
-  colorChangeDurationMs = 10000;
-  springVelocity = 1;
-  springMass = 10;
+  colorChangeDurationMs = 10500;
+  springVelocity = 1.5;
+  springMass = 11;
   springEasyStiffness = 20;
   springStiffStiffness = 40;
 
