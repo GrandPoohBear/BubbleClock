@@ -17,7 +17,8 @@ type BubbleProps = {
   enabled: boolean;
 };
 
-export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
+export const Bubble: React.FC<BubbleProps> = ({x, y, color}) => {
+  // Set the initial position to something random
   const position = useSharedValue({
     left: Math.random() * Dimensions.get('window').width,
     top: Math.random() * Dimensions.get('window').height,
@@ -57,13 +58,13 @@ export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
         redGradient.outputRange,
       ),
       width: withTiming(bubbleModel.bubbleWidth, {
-        duration: bubbleModel.colorChangeDurationMs,
+        duration: bubbleModel.colorChangeDurationMs / 2,
       }),
       height: withTiming(bubbleModel.bubbleWidth, {
-        duration: bubbleModel.colorChangeDurationMs,
+        duration: bubbleModel.colorChangeDurationMs / 2,
       }),
       borderRadius: withTiming(bubbleModel.bubbleWidth, {
-        duration: bubbleModel.colorChangeDurationMs,
+        duration: bubbleModel.colorChangeDurationMs / 2,
       }),
     };
   });

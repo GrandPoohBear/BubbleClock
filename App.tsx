@@ -1,6 +1,5 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {StatusBar, View} from 'react-native';
+import {StatusBar} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 
 import {BubbleContainer} from './src/Display/BubbleContainer';

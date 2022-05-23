@@ -19,8 +19,6 @@ class TimerModel {
     const filteredSecsDiff =
       secsDiff - (secsDiff % bubbleModel.refreshIntervalSecs);
 
-    console.log(`filteredSecsDiff is ${secsDiff}`);
-
     if (secsDiff < 0) {
       this.isRunning = false;
       return '0000';
@@ -30,7 +28,6 @@ class TimerModel {
     const seconds = ('' + (filteredSecsDiff % 60)).padStart(2, '0');
 
     this.timeString = `${minutes}${seconds}`;
-    console.log(`Time is now ${this.timeString}`);
   }
 
   startTimer = (numSeconds: number) => {
