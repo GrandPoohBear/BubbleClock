@@ -1,18 +1,22 @@
 import React from 'react';
 import {StatusBar} from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import * as eva from '@eva-design/eva';
 
-import {BubbleContainer} from './src/Display/BubbleContainer';
+import {ApplicationProvider} from '@ui-kitten/components';
+import {MainScreen} from './src/MainScreen';
 import {BACKGROUND_BLACKISH} from './src/colors';
 
 const App = () => {
   return (
-    <SafeAreaProvider style={{backgroundColor: BACKGROUND_BLACKISH}}>
-      <StatusBar barStyle={'dark-content'} />
-      <SafeAreaView>
-        <BubbleContainer />
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <ApplicationProvider {...eva} theme={eva.dark}>
+      <SafeAreaProvider style={{backgroundColor: BACKGROUND_BLACKISH}}>
+        <StatusBar barStyle={'dark-content'} />
+        <SafeAreaView>
+          <MainScreen />
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </ApplicationProvider>
   );
 };
 

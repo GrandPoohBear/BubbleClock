@@ -10,13 +10,16 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@eva-design/eva": "^2.1.1",
+    "@ui-kitten/components": "^5.1.2",
     "lodash": "^4.17.21",
     "mobx": "^6.5.0",
     "mobx-react-lite": "^3.4.0",
     "react": "17.0.2",
     "react-native": "0.68.2",
     "react-native-reanimated": "^2.8.0",
-    "react-native-safe-area-context": "^4.2.5"
+    "react-native-safe-area-context": "^4.2.5",
+    "react-native-svg": "^12.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

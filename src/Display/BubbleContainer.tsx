@@ -1,5 +1,5 @@
-import React, {useState, useCallback, useEffect} from 'react';
-import {View, StyleSheet, Button} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, StyleSheet} from 'react-native';
 import {
   makeDotArray,
   DISPLAY_DOTS_HEIGHT,
@@ -44,18 +44,6 @@ export const BubbleContainer = observer(() => {
     };
   });
 
-  const start1MinuteTimer = useCallback(() => {
-    timerModel.startTimer(1 * 60);
-  }, []);
-
-  const start3MinuteTimer = useCallback(() => {
-    timerModel.startTimer(3 * 60);
-  }, []);
-
-  const start5MinuteTimer = useCallback(() => {
-    timerModel.startTimer(5 * 60);
-  }, []);
-
   const bubbleArray = displayData.dotArray.flatMap((row, rowIndex) => {
     return row.flatMap((cell, colIndex) => {
       const myIndex = rowIndex * row.length + colIndex;
@@ -94,10 +82,6 @@ export const BubbleContainer = observer(() => {
         }}>
         {bubbleArray}
       </View>
-
-      <Button title="Start 1 Minute Timer" onPress={start1MinuteTimer} />
-      <Button title="Start 3 Minute Timer" onPress={start3MinuteTimer} />
-      <Button title="Start 5 Minute Timer" onPress={start5MinuteTimer} />
     </View>
   );
 });

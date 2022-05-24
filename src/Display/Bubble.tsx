@@ -5,10 +5,9 @@ import Animated, {
   withTiming,
   useAnimatedStyle,
   withSpring,
-  interpolateColor,
 } from 'react-native-reanimated';
 import {Dimensions, StyleSheet} from 'react-native';
-import {redGradient} from './BubbleColors';
+import {redGradientCLUT} from './BubbleColors';
 import {bubbleModel} from './BubbleModel';
 
 type BubbleProps = {
@@ -28,16 +27,21 @@ export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
     position.value = {left: x, top: y};
   }, [position, x, y]);
 
-  const colorProgress = useDerivedValue(() => {
-    return withTiming(enabled ? 1 : 0, {
+  const colorChangeIndex = useDerivedValue(() => {
+    const target = enabled ? 1 : 0;
+    return withTiming(target, {
       duration: bubbleModel.colorChangeDurationMs,
     });
-  });
+  }, [enabled]);
+  const color = useDerivedValue(() => {
+    return redGradientCLUT(colorChangeIndex.value);
+  }, [colorChangeIndex]);
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          translateX: withSpring(bubbleModel.leftOffset + position.value.left, {
+          translateX: withSpring(bubbleModel.leftInset + position.value.left, {
             velocity: bubbleModel.springVelocity,
             mass: bubbleModel.springMass,
             stiffness: bubbleModel.springEasyStiffness,
@@ -52,11 +56,7 @@ export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
         },
       ],
 
-      backgroundColor: interpolateColor(
-        colorProgress.value,
-        redGradient.inputRange,
-        redGradient.outputRange,
-      ),
+      backgroundColor: color.value,
       width: withTiming(bubbleModel.bubbleWidth, {
         duration: bubbleModel.colorChangeDurationMs / 2,
       }),
@@ -64,6 +64,9 @@ export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
         duration: bubbleModel.colorChangeDurationMs / 2,
       }),
       borderRadius: withTiming(bubbleModel.bubbleWidth, {
+        duration: bubbleModel.colorChangeDurationMs / 2,
+      }),
+      borderWidth: withTiming(bubbleModel.bubbleWidth / 4, {
         duration: bubbleModel.colorChangeDurationMs / 2,
       }),
     };
@@ -75,5 +78,7 @@ export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
 const styles = StyleSheet.create({
   bubble: {
     position: 'absolute',
+    borderColor: '#1119',
+    borderStyle: 'solid',
   },
 });

@@ -7,6 +7,8 @@ class TimerModel {
   finishTime = new Date();
   lastUpdatedTime = new Date();
   timeString = '0000';
+  initialTimeString = '0100';
+  isDone = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -21,6 +23,7 @@ class TimerModel {
 
     if (secsDiff < 0) {
       this.isRunning = false;
+      this.isDone = true;
       return '0000';
     }
 
@@ -36,6 +39,18 @@ class TimerModel {
 
     this.finishTime = targetDate;
     this.isRunning = true;
+    this.isDone = false;
+  };
+
+  stopTimer = () => {
+    this.isRunning = false;
+  };
+
+  setInitialTimeString = (timeString: string) => {
+    this.initialTimeString = timeString;
+    if (!this.isRunning) {
+      this.timeString = timeString;
+    }
   };
 
   updateTimer = (currentTime: Date, intervalHandle: NodeJS.Timer) => {
@@ -50,12 +65,10 @@ reaction(
   () => timerModel.isRunning,
   (isRunning, wasRunning) => {
     if (isRunning && !wasRunning) {
-      console.log('Starting Timer');
       const interval = setInterval(() => {
         timerModel.updateTimer(new Date(), interval);
       }, 50);
     } else if (!isRunning && wasRunning) {
-      console.log('Stopping interval');
       clearInterval(timerModel.intervalHandle);
     }
   },

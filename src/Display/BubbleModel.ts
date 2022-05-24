@@ -5,7 +5,7 @@ import {EdgeInsets} from 'react-native-safe-area-context';
 class BubbleModel {
   windowDimensions = Dimensions.get('window');
   safeAreaInsets: EdgeInsets = {bottom: 0, left: 0, right: 0, top: 0};
-  leftOffset = 0;
+  leftInset = 20;
   topOffset = 50;
   refreshIntervalSecs = 10;
 
@@ -24,14 +24,10 @@ class BubbleModel {
   }
 
   get bubbleWidth() {
-    console.log({
-      safeAreaInsets: this.safeAreaInsets,
-      windowDimensions: this.windowDimensions,
-    });
-
     return (
       (this.windowDimensions.width -
-        (this.safeAreaInsets.left + this.safeAreaInsets.right)) /
+        (this.safeAreaInsets.left + this.safeAreaInsets.right) -
+        2 * this.leftInset) /
       (1.25 * DISPLAY_DOTS_WIDTH)
     );
   }
