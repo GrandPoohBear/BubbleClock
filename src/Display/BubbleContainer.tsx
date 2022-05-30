@@ -25,22 +25,27 @@ export const BubbleContainer = observer(() => {
     bubbleModel.setSafeAreaInsets(safeAreaInsets);
   }, [safeAreaInsets]);
 
-  useEffect(() => {
-    const disposer = reaction(
-      () => timerModel.timeString,
-      () => {
-        const dotArray = makeDotArray(
-          timerModel.timeString,
-          bubbleModel.currentFont,
-        );
-        setDisplayData({
-          timeString: timerModel.timeString,
-          shuffleTable: make2DSparseShuffleTable(dotArray),
-          dotArray: dotArray,
-        });
-      },
+  const refreshDisplay = () => {
+    const dotArray = makeDotArray(
+      timerModel.timeString,
+      bubbleModel.currentFont,
     );
+    setDisplayData({
+      timeString: timerModel.timeString,
+      shuffleTable: make2DSparseShuffleTable(dotArray),
+      dotArray: dotArray,
+    });
+  };
 
+  useEffect(() => {
+    const disposer = reaction(() => timerModel.timeString, refreshDisplay);
+    return () => {
+      disposer();
+    };
+  });
+
+  useEffect(() => {
+    const disposer = reaction(() => bubbleModel.currentFont, refreshDisplay);
     return () => {
       disposer();
     };
@@ -57,11 +62,11 @@ export const BubbleContainer = observer(() => {
           <StaticBubble
             key={`bubble_${rowIndex}_${colIndex}`}
             x={
-              rowIndex *
+              colIndex *
               (bubbleModel.bubbleWidth + bubbleModel.interBubbleSpace)
             }
             y={
-              colIndex *
+              rowIndex *
               (bubbleModel.bubbleWidth + bubbleModel.interBubbleSpace)
             }
             enabled={false}

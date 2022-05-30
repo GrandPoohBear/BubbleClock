@@ -29,7 +29,7 @@ class BubbleModel {
   }
 
   get gridWidth() {
-    return (this.currentFont.charWidth + SPACE_BETWEEN_CHARS) * 4 + COLON_WIDTH;
+    return (this.currentFont.charWidth + SPACE_BETWEEN_CHARS) * 3 + COLON_WIDTH;
   }
 
   get bubbleWidth() {

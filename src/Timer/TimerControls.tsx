@@ -3,6 +3,10 @@ import {Button, ButtonGroup} from '@ui-kitten/components';
 import {observer} from 'mobx-react-lite';
 import {View, StyleSheet} from 'react-native';
 import {timerModel} from './TimerModel';
+import {bubbleModel} from '../Display/BubbleModel';
+import {denseFont} from '../Font/BubbleFontDense';
+import {sparseFont} from '../Font/BubbleFontSparse';
+import {tinyFont} from '../Font/BubbleFontTiny';
 
 export const TimerControls = observer(() => {
   const [timerDuration, setTimerDuration] = useState(1);
@@ -32,33 +36,53 @@ export const TimerControls = observer(() => {
 
   return (
     <View style={styles.container}>
-      <ButtonGroup appearance="filled" status="control">
+      <View>
+        <ButtonGroup appearance="filled" status="control">
+          <Button
+            onPress={set1Minute}
+            disabled={timerModel.isRunning}
+            appearance={timerDuration === 1 ? 'filled' : 'outline'}>
+            1 min
+          </Button>
+          <Button
+            onPress={set3Minute}
+            disabled={timerModel.isRunning}
+            appearance={timerDuration === 3 ? 'filled' : 'outline'}>
+            3 min
+          </Button>
+          <Button
+            onPress={set5Minute}
+            disabled={timerModel.isRunning}
+            appearance={timerDuration === 5 ? 'filled' : 'outline'}>
+            5 min
+          </Button>
+        </ButtonGroup>
+        <ButtonGroup>
+          <Button
+            disabled={timerModel.isRunning}
+            onPress={() => bubbleModel.setFont(tinyFont)}>
+            Sm
+          </Button>
+          <Button
+            disabled={timerModel.isRunning}
+            onPress={() => bubbleModel.setFont(sparseFont)}>
+            Med
+          </Button>
+          <Button
+            disabled={timerModel.isRunning}
+            onPress={() => bubbleModel.setFont(denseFont)}>
+            Lrg
+          </Button>
+        </ButtonGroup>
+      </View>
+      <View>
         <Button
-          onPress={set1Minute}
-          disabled={timerModel.isRunning}
-          appearance={timerDuration === 1 ? 'filled' : 'outline'}>
-          1 min
+          style={styles.startButton}
+          status="info"
+          onPress={timerModel.isRunning ? stopTimer : startTimer}>
+          {timerModel.isRunning ? 'Stop' : 'Start'}
         </Button>
-        <Button
-          onPress={set3Minute}
-          disabled={timerModel.isRunning}
-          appearance={timerDuration === 3 ? 'filled' : 'outline'}>
-          3 min
-        </Button>
-        <Button
-          onPress={set5Minute}
-          disabled={timerModel.isRunning}
-          appearance={timerDuration === 5 ? 'filled' : 'outline'}>
-          5 min
-        </Button>
-      </ButtonGroup>
-
-      <Button
-        style={styles.startButton}
-        status="info"
-        onPress={timerModel.isRunning ? stopTimer : startTimer}>
-        {timerModel.isRunning ? 'Stop' : 'Start'}
-      </Button>
+      </View>
     </View>
   );
 });
@@ -71,5 +95,5 @@ const styles = StyleSheet.create({
     paddingRight: 50,
     justifyContent: 'space-between',
   },
-  startButton: {},
+  startButton: {flex: 1, marginLeft: 10},
 });
