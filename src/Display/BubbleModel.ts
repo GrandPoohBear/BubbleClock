@@ -1,7 +1,10 @@
 import {makeAutoObservable} from 'mobx';
 import {Dimensions, ScaledSize} from 'react-native';
-import {DISPLAY_DOTS_WIDTH} from './BubbleFont';
 import {EdgeInsets} from 'react-native-safe-area-context';
+import {BubbleFont} from '../Font/BubbleFont';
+import {SPACE_BETWEEN_CHARS, COLON_WIDTH} from '../Font/constants';
+import {sparseFont} from '../Font/BubbleFontSparse';
+
 class BubbleModel {
   windowDimensions = Dimensions.get('window');
   safeAreaInsets: EdgeInsets = {bottom: 0, left: 0, right: 0, top: 0};
@@ -15,6 +18,8 @@ class BubbleModel {
   springEasyStiffness = 20;
   springStiffStiffness = 40;
 
+  currentFont: BubbleFont = sparseFont;
+
   constructor() {
     Dimensions.addEventListener('change', ({window}) => {
       this.setWindowDimensions(window);
@@ -23,12 +28,16 @@ class BubbleModel {
     makeAutoObservable(this);
   }
 
+  get gridWidth() {
+    return (this.currentFont.charWidth + SPACE_BETWEEN_CHARS) * 4 + COLON_WIDTH;
+  }
+
   get bubbleWidth() {
     return (
       (this.windowDimensions.width -
         (this.safeAreaInsets.left + this.safeAreaInsets.right) -
         2 * this.leftInset) /
-      (1.25 * DISPLAY_DOTS_WIDTH)
+      (1.25 * this.gridWidth)
     );
   }
 
@@ -42,6 +51,10 @@ class BubbleModel {
 
   setSafeAreaInsets = (safeAreaInsets: EdgeInsets) => {
     this.safeAreaInsets = safeAreaInsets;
+  };
+
+  setFont = (font: BubbleFont) => {
+    this.currentFont = font;
   };
 }
 

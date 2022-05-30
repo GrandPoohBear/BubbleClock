@@ -17,17 +17,17 @@ export const TimerControls = observer(() => {
 
   const set1Minute = useCallback(() => {
     setTimerDuration(1);
-    timerModel.setInitialTimeString('0100');
+    timerModel.setInitialTimeString('100');
   }, []);
 
   const set3Minute = useCallback(() => {
     setTimerDuration(3);
-    timerModel.setInitialTimeString('0300');
+    timerModel.setInitialTimeString('300');
   }, []);
 
   const set5Minute = useCallback(() => {
     setTimerDuration(5);
-    timerModel.setInitialTimeString('0500');
+    timerModel.setInitialTimeString('500');
   }, []);
 
   return (

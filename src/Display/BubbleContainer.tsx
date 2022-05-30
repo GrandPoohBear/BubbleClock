@@ -1,25 +1,23 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {
-  makeDotArray,
-  DISPLAY_DOTS_HEIGHT,
-  DISPLAY_DOTS_WIDTH,
-} from './BubbleFont';
-import {shuffle} from 'lodash';
-import {Bubble} from './Bubble';
-import {makeShuffleTable} from '../utility/ShuffleTable';
+import {Bubble, StaticBubble} from './Bubble';
+import {make2DSparseShuffleTable} from '../utility/ShuffleTable';
 import {bubbleModel} from './BubbleModel';
 import {observer} from 'mobx-react-lite';
 import {reaction} from 'mobx';
 import {timerModel} from '../Timer/TimerModel';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {BACKGROUND_BLACKISH} from '../colors';
+import {makeDotArray} from '../Font/makeDotArray';
+import {isUndefined} from 'lodash';
+
+const initialDotArray = makeDotArray('000', bubbleModel.currentFont);
 
 export const BubbleContainer = observer(() => {
   const [displayData, setDisplayData] = useState({
-    timeString: '0000',
-    shuffleTable: makeShuffleTable(DISPLAY_DOTS_HEIGHT * DISPLAY_DOTS_WIDTH),
-    dotArray: makeDotArray('0000'),
+    timeString: '000',
+    shuffleTable: make2DSparseShuffleTable(initialDotArray),
+    dotArray: initialDotArray,
   });
 
   const safeAreaInsets = useSafeAreaInsets();
@@ -31,10 +29,14 @@ export const BubbleContainer = observer(() => {
     const disposer = reaction(
       () => timerModel.timeString,
       () => {
+        const dotArray = makeDotArray(
+          timerModel.timeString,
+          bubbleModel.currentFont,
+        );
         setDisplayData({
           timeString: timerModel.timeString,
-          shuffleTable: shuffle(displayData.shuffleTable),
-          dotArray: makeDotArray(timerModel.timeString),
+          shuffleTable: make2DSparseShuffleTable(dotArray),
+          dotArray: dotArray,
         });
       },
     );
@@ -44,39 +46,60 @@ export const BubbleContainer = observer(() => {
     };
   });
 
-  const bubbleArray = displayData.dotArray.flatMap((row, rowIndex) => {
-    return row.flatMap((cell, colIndex) => {
-      const myIndex = rowIndex * row.length + colIndex;
-      const shuffledIndex = displayData.shuffleTable[myIndex];
-      const shuffledColIndex = shuffledIndex % DISPLAY_DOTS_WIDTH;
-      const shuffledRowIndex = Math.floor(shuffledIndex / DISPLAY_DOTS_WIDTH);
-      const shuffledCell =
-        displayData.dotArray[shuffledRowIndex][shuffledColIndex];
+  let staticCount = 0;
+  let dynamicCount = 0;
 
+  const bubbleArray = displayData.dotArray.map((row, rowIndex) => {
+    return row.map((cell, colIndex) => {
+      if (isUndefined(cell)) {
+        staticCount++;
+        return (
+          <StaticBubble
+            key={`bubble_${rowIndex}_${colIndex}`}
+            x={
+              rowIndex *
+              (bubbleModel.bubbleWidth + bubbleModel.interBubbleSpace)
+            }
+            y={
+              colIndex *
+              (bubbleModel.bubbleWidth + bubbleModel.interBubbleSpace)
+            }
+            enabled={false}
+          />
+        );
+      }
+      //console.log(`r: ${rowIndex}, c: ${colIndex}, v: ${cell}`);
+      const shuffledVal = displayData.shuffleTable.getVal(rowIndex, colIndex);
+      const shuffledCoords = displayData.shuffleTable.getCoords(
+        rowIndex,
+        colIndex,
+      );
+      dynamicCount++;
       return (
         <Bubble
-          key={`bubble_${myIndex}`}
+          key={`bubble_${rowIndex}_${colIndex}`}
           x={
-            shuffledColIndex *
+            shuffledCoords[1] *
             (bubbleModel.bubbleWidth + bubbleModel.interBubbleSpace)
           }
           y={
-            shuffledRowIndex *
+            shuffledCoords[0] *
             (bubbleModel.bubbleWidth + bubbleModel.interBubbleSpace)
           }
-          enabled={shuffledCell}
+          enabled={shuffledVal || false}
         />
       );
     });
   });
 
+  console.log(`static: ${staticCount}. dynamic: ${dynamicCount}`);
   return (
     <View style={bubbleStyles.container}>
       <View
         style={{
           marginBottom:
             (bubbleModel.bubbleWidth + bubbleModel.interBubbleSpace) *
-              DISPLAY_DOTS_HEIGHT +
+              bubbleModel.currentFont.charHeight +
             bubbleModel.topOffset +
             20,
         }}>

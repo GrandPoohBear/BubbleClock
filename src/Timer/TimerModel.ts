@@ -6,8 +6,8 @@ class TimerModel {
   intervalHandle: NodeJS.Timer | undefined = undefined;
   finishTime = new Date();
   lastUpdatedTime = new Date();
-  timeString = '0000';
-  initialTimeString = '0100';
+  timeString = '000';
+  initialTimeString = '100';
   isDone = false;
 
   constructor() {
@@ -24,10 +24,10 @@ class TimerModel {
     if (secsDiff < 0) {
       this.isRunning = false;
       this.isDone = true;
-      return '0000';
+      return '000';
     }
 
-    const minutes = ('' + Math.floor(filteredSecsDiff / 60)).padStart(2, '0');
+    const minutes = '' + Math.floor(filteredSecsDiff / 60);
     const seconds = ('' + (filteredSecsDiff % 60)).padStart(2, '0');
 
     this.timeString = `${minutes}${seconds}`;

@@ -5,7 +5,6 @@ import {BubbleContainer} from './Display/BubbleContainer';
 import {TimerControls} from './Timer/TimerControls';
 import {observer} from 'mobx-react-lite';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {DISPLAY_DOTS_HEIGHT} from './Display/BubbleFont';
 import {bubbleModel} from './Display/BubbleModel';
 
 export const MainScreen = observer(() => {
@@ -19,7 +18,9 @@ export const MainScreen = observer(() => {
           styles.timerControls,
           {
             marginTop:
-              DISPLAY_DOTS_HEIGHT * bubbleModel.bubbleWidth * 1.25 +
+              bubbleModel.currentFont.charHeight *
+                bubbleModel.bubbleWidth *
+                1.25 +
               bubbleModel.safeAreaInsets.top +
               50,
           },

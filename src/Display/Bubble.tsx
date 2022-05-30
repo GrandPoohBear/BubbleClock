@@ -6,7 +6,7 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
-import {Dimensions, StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import {redGradientCLUT} from './BubbleColors';
 import {bubbleModel} from './BubbleModel';
 
@@ -72,7 +72,33 @@ export const Bubble: React.FC<BubbleProps> = ({x, y, enabled}) => {
     };
   });
 
-  return <Animated.View style={[animatedStyle, styles.bubble]} />;
+  return (
+    <Animated.View
+      style={[animatedStyle, styles.bubble, styles.foregroundBubble]}
+    />
+  );
+};
+
+export const StaticBubble: React.FC<BubbleProps> = ({x, y}) => {
+  return (
+    <View
+      style={[
+        {
+          transform: [
+            {translateX: bubbleModel.leftInset + x},
+            {translateY: bubbleModel.topOffset + y},
+          ],
+          backgroundColor: redGradientCLUT(0),
+          width: bubbleModel.bubbleWidth,
+          height: bubbleModel.bubbleWidth,
+          borderRadius: bubbleModel.bubbleWidth,
+          borderWidth: bubbleModel.bubbleWidth / 4,
+        },
+        styles.bubble,
+        styles.backgroundBubble,
+      ]}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
@@ -80,5 +106,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderColor: '#1119',
     borderStyle: 'solid',
+  },
+  backgroundBubble: {
+    zIndex: 0,
+  },
+  foregroundBubble: {
+    zIndex: 1,
   },
 });
