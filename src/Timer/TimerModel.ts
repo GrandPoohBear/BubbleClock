@@ -1,12 +1,13 @@
-import {makeAutoObservable, reaction} from 'mobx';
+import {makeAutoObservable} from 'mobx';
 import {bubbleModel} from '../Display/BubbleModel';
+import {addTimerReactions} from './timer-reactions';
 
-class TimerModel {
+export class TimerModel {
   isRunning = false;
   intervalHandle: NodeJS.Timer | undefined = undefined;
   finishTime = new Date();
   lastUpdatedTime = new Date();
-  timeString = '000';
+  timeString = '100';
   initialTimeString = '100';
   isDone = false;
 
@@ -61,15 +62,4 @@ class TimerModel {
 }
 
 export const timerModel = new TimerModel();
-reaction(
-  () => timerModel.isRunning,
-  (isRunning, wasRunning) => {
-    if (isRunning && !wasRunning) {
-      const interval = setInterval(() => {
-        timerModel.updateTimer(new Date(), interval);
-      }, 50);
-    } else if (!isRunning && wasRunning) {
-      clearInterval(timerModel.intervalHandle);
-    }
-  },
-);
+addTimerReactions(timerModel);

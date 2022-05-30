@@ -5,7 +5,6 @@ import {BubbleContainer} from './Display/BubbleContainer';
 import {TimerControls} from './Timer/TimerControls';
 import {observer} from 'mobx-react-lite';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {bubbleModel} from './Display/BubbleModel';
 
 export const MainScreen = observer(() => {
   return (
@@ -13,28 +12,22 @@ export const MainScreen = observer(() => {
       <View style={styles.fullScreenAbsolute}>
         <BubbleContainer />
       </View>
-      <View
-        style={[
-          styles.timerControls,
-          {
-            marginTop:
-              bubbleModel.currentFont.charHeight *
-                bubbleModel.bubbleWidth *
-                1.25 +
-              bubbleModel.safeAreaInsets.top +
-              50,
-          },
-        ]}>
-        <TimerControls />
+      <View style={styles.container}>
+        <View style={[styles.timerControls]}>
+          <TimerControls />
+        </View>
       </View>
     </SafeAreaView>
   );
 });
 
 const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    height: '100%',
+  },
   fullScreenAbsolute: {position: 'absolute', top: 0, left: 0, right: 0},
   timerControls: {
-    flex: 1,
     minHeight: 50,
     width: '100%',
     justifyContent: 'center',

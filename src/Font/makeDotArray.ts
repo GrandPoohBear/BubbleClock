@@ -15,8 +15,8 @@ export const makeDotArray = (
     );
 
   // Draw the colon
-  arr[1][font.charWidth + SPACE_BETWEEN_CHARS] = true; //bottom dot
-  arr[font.charHeight - 2][font.charWidth + SPACE_BETWEEN_CHARS] = true; //top dot
+  arr[2][font.charWidth + SPACE_BETWEEN_CHARS] = true; //bottom dot
+  arr[font.charHeight - 3][font.charWidth + SPACE_BETWEEN_CHARS] = true; //top dot
 
   for (let i = 0; i < input.length && i < 3; i++) {
     const numChar = input.charCodeAt(i) - '0'.charCodeAt(0);

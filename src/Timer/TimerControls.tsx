@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {Button, ButtonGroup} from '@ui-kitten/components';
 import {observer} from 'mobx-react-lite';
 import {View, StyleSheet} from 'react-native';
@@ -7,17 +7,24 @@ import {bubbleModel} from '../Display/BubbleModel';
 import {denseFont} from '../Font/BubbleFontDense';
 import {sparseFont} from '../Font/BubbleFontSparse';
 import {tinyFont} from '../Font/BubbleFontTiny';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  interpolateColor,
+  withTiming,
+} from 'react-native-reanimated';
 
 export const TimerControls = observer(() => {
   const [timerDuration, setTimerDuration] = useState(1);
+  const animationProgress = useSharedValue(1);
+
+  useEffect(() => {
+    animationProgress.value = withTiming(timerModel.isRunning ? 0 : 1);
+  });
 
   const startTimer = useCallback(() => {
     timerModel.startTimer(timerDuration * 60);
   }, [timerDuration]);
-
-  const stopTimer = useCallback(() => {
-    timerModel.stopTimer();
-  }, []);
 
   const set1Minute = useCallback(() => {
     setTimerDuration(1);
@@ -34,27 +41,43 @@ export const TimerControls = observer(() => {
     timerModel.setInitialTimeString('500');
   }, []);
 
+  const animatedStyle = useAnimatedStyle(() => {
+    const color = interpolateColor(
+      animationProgress.value,
+      [0, 1],
+      ['#00000000', '#25023099'],
+    );
+    return {
+      borderColor: color,
+      backgroundColor: color,
+      opacity: withTiming(animationProgress.value),
+    };
+  });
+
   return (
-    <View style={styles.container}>
-      <View>
+    <Animated.View
+      pointerEvents={timerModel.isRunning ? 'none' : 'auto'}
+      style={[animatedStyle, styles.container]}>
+      <View style={styles.spacer} />
+      <View style={styles.buttonContainer}>
         <ButtonGroup appearance="filled" status="control">
           <Button
             onPress={set1Minute}
             disabled={timerModel.isRunning}
             appearance={timerDuration === 1 ? 'filled' : 'outline'}>
-            1 min
+            1 m
           </Button>
           <Button
             onPress={set3Minute}
             disabled={timerModel.isRunning}
             appearance={timerDuration === 3 ? 'filled' : 'outline'}>
-            3 min
+            3 m
           </Button>
           <Button
             onPress={set5Minute}
             disabled={timerModel.isRunning}
             appearance={timerDuration === 5 ? 'filled' : 'outline'}>
-            5 min
+            5 m
           </Button>
         </ButtonGroup>
         <ButtonGroup>
@@ -79,21 +102,29 @@ export const TimerControls = observer(() => {
         <Button
           style={styles.startButton}
           status="info"
-          onPress={timerModel.isRunning ? stopTimer : startTimer}>
-          {timerModel.isRunning ? 'Stop' : 'Start'}
+          disabled={timerModel.isRunning}
+          onPress={startTimer}>
+          {'Start'}
         </Button>
       </View>
-    </View>
+      <View style={styles.spacer} />
+    </Animated.View>
   );
 });
 
 const styles = StyleSheet.create({
+  spacer: {
+    maxWidth: 50,
+  },
   container: {
     flexDirection: 'row',
     width: '100%',
-    marginLeft: 50,
-    paddingRight: 50,
     justifyContent: 'space-between',
+    borderWidth: 20,
+    borderRadius: 20,
   },
   startButton: {flex: 1, marginLeft: 10},
+  buttonContainer: {
+    alignItems: 'center',
+  },
 });

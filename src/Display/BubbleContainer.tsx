@@ -11,11 +11,11 @@ import {BACKGROUND_BLACKISH} from '../colors';
 import {makeDotArray} from '../Font/makeDotArray';
 import {isUndefined} from 'lodash';
 
-const initialDotArray = makeDotArray('000', bubbleModel.currentFont);
+const initialDotArray = makeDotArray('100', bubbleModel.currentFont);
 
 export const BubbleContainer = observer(() => {
   const [displayData, setDisplayData] = useState({
-    timeString: '000',
+    timeString: '100',
     shuffleTable: make2DSparseShuffleTable(initialDotArray),
     dotArray: initialDotArray,
   });
